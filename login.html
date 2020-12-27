@@ -25,13 +25,13 @@
             <div class="layui-form-item">
                 <i class="layui-icon layui-icon-username"></i>
                 <!-- lay-verify表单验证: 更多参考: https://www.layui.com/doc/modules/form.html -->
-                <input type="text" name="username" required lay-verify="required" placeholder="请输入用户名"
+                <input type="text" name="username" required lay-verify="required|usern" placeholder="请输入用户名"
                     autocomplete="off" class="layui-input">
             </div>
             <!-- 第二行：密码 -->
             <div class="layui-form-item">
                 <i class="layui-icon layui-icon-password"></i>
-                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
+                <input type="password" name="password" required lay-verify="required|pwd" placeholder="请输入密码"
                     autocomplete="off" class="layui-input">
             </div>
             <!-- 第三行：按钮 -->
@@ -55,21 +55,21 @@
             <!-- 第一行：用户名 -->
             <div class="layui-form-item">
                 <i class="layui-icon layui-icon-username"></i>
-                <input type="text" name="username" required lay-verify="required" placeholder="请输入用户名"
+                <input type="text" name="username" required lay-verify="required|usern" placeholder="请输入用户名"
                     autocomplete="off" class="layui-input">
             </div>
 
             <!-- 第二行：密码 -->
             <div class="layui-form-item">
                 <i class="layui-icon layui-icon-password"></i>
-                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
+                <input type="password" name="password" required lay-verify="required|pwd" placeholder="请输入密码"
                     autocomplete="off" class="layui-input pwd">
             </div>
 
             <!-- 第三行：重复密码 -->
             <div class="layui-form-item">
                 <i class="layui-icon layui-icon-password"></i>
-                <input type="password" required lay-verify="required" placeholder="请再次输入密码" autocomplete="off"
+                <input type="password" required lay-verify="required|repwd" placeholder="请再次输入密码" autocomplete="off"
                     class="layui-input">
             </div>
 
@@ -85,6 +85,7 @@
     </div>
 
     <script src="./assets/lib/jquery.js"></script>
+    <script src="./assets/lib/axios.js"></script>
     <script src="./assets/lib/layui/layui.all.js"></script>
     <script src="./login.js"></script>
 </body>
