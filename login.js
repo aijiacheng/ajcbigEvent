@@ -41,6 +41,7 @@ $("#register .layui-form").on('submit', e => {
         username: $("#register input[name=username]").val(),//input[name=username]属性选择器
         password: $("#register input[name=password]").val()
     }
+    /*
     //转换成key=value&key=value字符串
     let arr = [];
     //遍历对象
@@ -48,9 +49,12 @@ $("#register .layui-form").on('submit', e => {
         arr.push(`${key}=${data[key]}`);
     }
     let argString = arr.join('&');
-
+    此处封装成了一个公用方法
+    */
+    const dataStr =  objToArg(data)
+    console.log( dataStr );
     axios
-        .post("http://ajax.frontend.itheima.net/api/reguser", argString)
+        .post("http://ajax.frontend.itheima.net/api/reguser", dataStr)
         .then(res => {
             console.log(res);
             // 结构对象赋值
@@ -80,6 +84,7 @@ $('#login .layui-form').on('submit', (e) => {
         username: $('#login input[name=username]').val(),
         password: $('#login input[name=password]').val(),
     }
+    /*
     //遍历对象
     let arr = [];
     for (const key in data) {
@@ -88,6 +93,9 @@ $('#login .layui-form').on('submit', (e) => {
     }
     const dataStr = arr.join('&')//数组的join方法是将数组的每一项拼接成字符串
     console.log(dataStr);
+    此处封装成一个公用方法
+    */
+    const dataStr = objToArg(data);
     axios
         .post('http://ajax.frontend.itheima.net/api/login', dataStr)
         .then((res) => {
