@@ -51,25 +51,23 @@ $("#register .layui-form").on('submit', e => {
     let argString = arr.join('&');
     此处封装成了一个公用方法
     */
-    const dataStr =  objToArg(data)
-    console.log( dataStr );
-    axios
-        .post("http://ajax.frontend.itheima.net/api/reguser", dataStr)
-        .then(res => {
-            console.log(res);
-            // 结构对象赋值
-            const { status, message } = res.data
-            if (status === 0) {
-                layer.msg(message)//此行代码为插件的方法，用来显示一个提示框
-                // 显示登录页面 - 让用户登录
-                $("#register").stop().hide();
-            } else {
-                layer.msg(message)
-                $('#login input[name=username]').val('')
-                $('#login input[name=password]').val('')
-            }
+    //使用封装的数据格式处理函数
+    const dataStr = objToArg(data)
 
-        });
+    //使用封装的注册请求函数
+    postReguser(dataStr, (res) => {
+        // 结构对象赋值
+        const { status, message } = res.data
+        if (status === 0) {
+            layer.msg(message)//此行代码为插件的方法，用来显示一个提示框
+            // 显示登录页面 - 让用户登录
+            $("#register").stop().hide();
+        } else {
+            layer.msg(message)
+            $('#login input[name=username]').val('')
+            $('#login input[name=password]').val('')
+        }
+    })
 
 })
 
@@ -95,25 +93,34 @@ $('#login .layui-form').on('submit', (e) => {
     console.log(dataStr);
     此处封装成一个公用方法
     */
+    //使用数据格式处理函数
     const dataStr = objToArg(data);
-    axios
-        .post('http://ajax.frontend.itheima.net/api/login', dataStr)
-        .then((res) => {
-            const { status, message } = res.data
-            console.log(status, message);
 
-            if (status === 0) {
-                layer.msg(message);
+    //使用封装的登录数据请求函数
+    postLogin(dataStr, (res) => {
+        //将返回的数据解构
+        const { status, message, token } = res.data
+        console.log(res);
 
-                //跳转到首页
-                setTimeout(() => {
-                    window.location.href = './index.html'
-                }, 1000)
+        if (status === 0) {
+            layer.msg(message);
 
-            } else {
-                layer.msg(message);
-                $('#login input[name=username]').val('')
-                $('#login input[name=password]').val('')
-            }
-        })
+            //每个用户都有一个唯一的token与之对应，有时候是需要token来实现功能的，所以需要存储起来
+            //不同页面都需要使用的数据，用localStorage方法存储
+            //localStorage将保存的数据 存到浏览器里的某个位置F12->Application->localStorage
+            //特点：永久存储(网页关掉 再打开 还有这个数据)
+            //setltem('key值',要存储的数据)
+            window.localStorage.setItem('token',token)
+
+            //跳转到首页
+            setTimeout(() => {
+                window.location.href = './index.html'
+            }, 1000)
+
+        } else {
+            layer.msg(message);
+            $('#login input[name=username]').val('')
+            $('#login input[name=password]').val('')
+        }
+    })
 })
