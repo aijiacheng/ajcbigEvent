@@ -5,22 +5,46 @@
 axios.defaults.baseURL = `http://ajax.frontend.itheima.net`
 
 //结构layui框架的提示框方法
-const {layer} = window.layui
-// 添加响应拦截器
-// axios.interceptors.response.use(function (response) {
-//     // 结构响应数据
-//     const { status, message } = response.data
-//     layer.msg(message)//layui框架的提示框
+const { layer } = window.layui
+// 添加请求拦截器
+// 请求拦截器，是在请求之前
+axios.interceptors.request.use(
+    // 型参config是ajax请求
+    function (config) { 
+    // 在发送请求之前添加请求头
+    config.headers['Authorization'] = window.localStorage.getItem('token')
+    return config;
+}, function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+});
 
-//     if ( status === 1 ) {
-//         window.localStorage.removeItem('token')
-//         window.location.href = '/login.html'
-//     }
-//     return response;
-// }, function (error) {
-//     // 对响应错误做点什么
-//     return Promise.reject(error);
-// });
+// 添加响应拦截器
+// 响应拦截器，是在响应数据进入then的函数处理之前先处理响应数据
+axios.interceptors.response.use(
+    //这里函数里面的型参response是返回的响应数据res
+    function (response) {
+        // 解构响应数据
+        const { status, message } = response.data
+        layer.msg(message)//layui框架的提示框
+        
+        // 如果是注册页面则不执行下面的跳转
+        if ( response.config.url == '/api/reguser') {
+            return response;
+        }
+
+        //如果status是1，也就是token失效，则移除token,并跳转到登录页面
+        if (status === 1) {
+            window.localStorage.removeItem('token')
+            window.location.href = './login.html'
+        }
+        //返回响应数据
+        return response;
+    }, function (error) {
+        // 对响应错误做点什么
+        return Promise.reject(error);
+    });
+
 //注册请求
 const postReguser = function (data, fn) {
     //axios请求方法一
@@ -46,13 +70,15 @@ const postLogin = (data, fn) => {
 }
 
 //用户登录数据获取请求
-const getInfoUser = (fn) =>{
-    axios.get('/my/userinfo',{
-        //设置请求头，
+const getInfoUser = (fn) => {
+    axios.get('/my/userinfo', {
+       /* //设置请求头，
         headers: {
-            Authorization:window.localStorage.getItem('token')
+            Authorization: window.localStorage.getItem('token')
         }
-    }).then((res)=> {
-         fn(res);
+        此处设置请求头使用请求拦截器设置了
+        */
+    }).then((res) => {
+        fn(res);
     })
 }

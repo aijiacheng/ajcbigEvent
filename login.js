@@ -58,12 +58,11 @@ $("#register .layui-form").on('submit', e => {
     postReguser(dataStr, (res) => {
         // 结构对象赋值
         const { status, message } = res.data
+        console.log( res );
         if (status === 0) {
-            layer.msg(message)//此行代码为插件的方法，用来显示一个提示框
             // 显示登录页面 - 让用户登录
             $("#register").stop().hide();
         } else {
-            layer.msg(message)
             $('#login input[name=username]').val('')
             $('#login input[name=password]').val('')
         }
@@ -100,11 +99,9 @@ $('#login .layui-form').on('submit', (e) => {
     postLogin(dataStr, (res) => {
         //将返回的数据解构
         const { status, message, token } = res.data
-        console.log(res);
+        
 
         if (status === 0) {
-            layer.msg(message);
-
             //每个用户都有一个唯一的token与之对应，有时候是需要token来实现功能的，所以需要存储起来
             //不同页面都需要使用的数据，用localStorage方法存储
             //localStorage将保存的数据 存到浏览器里的某个位置F12->Application->localStorage
