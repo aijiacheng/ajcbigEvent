@@ -82,3 +82,22 @@ const getInfoUser = (fn) => {
         fn(res);
     })
 }
+
+//更新用户基本信息
+const getInfouser2 = (data,fn) => {
+    axios.post('/my/userinfo',data).then((res) => {
+        fn(res);
+    })
+}
+// 重置密码
+const rePassword = (data, fn) => {
+    axios.post('/my/updatepwd',data).then((res) => {
+        fn(res);
+    })
+}
+//上传头像
+const upHeadImgAPI = (data, fn) => {
+    axios.post('/my/update/avatar',data).then((res)=> {
+        fn(res);
+    })
+}
