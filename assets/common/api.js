@@ -10,14 +10,14 @@ const { layer } = window.layui
 // 请求拦截器，是在请求之前
 axios.interceptors.request.use(
     // 型参config是ajax请求
-    function (config) { 
-    // 在发送请求之前添加请求头
-    config.headers['Authorization'] = window.localStorage.getItem('token')
-    return config;
-}, function (error) {
-    // 对请求错误做些什么
-    return Promise.reject(error);
-});
+    function (config) {
+        // 在发送请求之前添加请求头
+        config.headers['Authorization'] = window.localStorage.getItem('token')
+        return config;
+    }, function (error) {
+        // 对请求错误做些什么
+        return Promise.reject(error);
+    });
 
 // 添加响应拦截器
 // 响应拦截器，是在响应数据进入then的函数处理之前先处理响应数据
@@ -27,9 +27,9 @@ axios.interceptors.response.use(
         // 解构响应数据
         const { status, message } = response.data
         layer.msg(message)//layui框架的提示框
-        
+
         // 如果是注册页面则不执行下面的跳转
-        if ( response.config.url == '/api/reguser') {
+        if (response.config.url == '/api/reguser') {
             return response;
         }
 
@@ -72,32 +72,76 @@ const postLogin = (data, fn) => {
 //用户登录数据获取请求
 const getInfoUser = (fn) => {
     axios.get('/my/userinfo', {
-       /* //设置请求头，
-        headers: {
-            Authorization: window.localStorage.getItem('token')
-        }
-        此处设置请求头使用请求拦截器设置了
-        */
+        /* //设置请求头，
+         headers: {
+             Authorization: window.localStorage.getItem('token')
+         }
+         此处设置请求头使用请求拦截器设置了
+         */
     }).then((res) => {
         fn(res);
     })
 }
 
 //更新用户基本信息
-const getInfouser2 = (data,fn) => {
-    axios.post('/my/userinfo',data).then((res) => {
+const getInfouser2 = (data, fn) => {
+    axios.post('/my/userinfo', data).then((res) => {
         fn(res);
     })
 }
 // 重置密码
 const rePassword = (data, fn) => {
-    axios.post('/my/updatepwd',data).then((res) => {
+    axios.post('/my/updatepwd', data).then((res) => {
         fn(res);
     })
 }
 //上传头像
 const upHeadImgAPI = (data, fn) => {
-    axios.post('/my/update/avatar',data).then((res)=> {
+    axios.post('/my/update/avatar', data).then((res) => {
+        fn(res);
+    })
+}
+//获取文章类别
+const cateListAPI = (fn) => {
+    axios.get('/my/article/cates').then((res) => {
+        fn(res);
+    })
+}
+//新增文章类别
+const addCateAPI = (data, fn) => {
+    axios.post('/my/article/addcates', data).then((res) => {
+        fn(res);
+    })
+}
+//删除类别
+const delCateAPI = (data, fn) => {
+    axios.get(`/my/article/deletecate/${data}`).then((res) => {
+        fn(res);
+    })
+}
+//编辑类别
+const updateCateAPI = (data,fn) => {
+    axios.post('/my/article/updatecate',data).then((res)=> {
+        fn(res);
+    })
+}
+//发布新文章
+const postArticleAdd = (fd,fn) => {
+    axios.post('/my/article/add',fd).then((res) => {
+        fn(res);
+    })
+}
+//获取文章
+const artListAPI = (data,fn) => {
+    axios.get('/my/article/list',{
+        params: data
+    }).then((res) => {
+        fn(res);
+    })
+}
+//根据文章id删除文章
+const getArticleDelById = (data, fn) => {
+    axios.get(`/my/article/delete/${data}`).then((res) => {
         fn(res);
     })
 }
